@@ -1,0 +1,28 @@
+& when (@media-common = true) {
+    //
+    // Progress indicator
+    // _____________________________________________
+
+    .progress-indicator {
+        width: 100%;
+        background-color: @progress_indicator__background_color;
+        margin: 10px 0;
+        .lib-css(border-radius, @progress_indicator__radius);
+        position: relative;
+
+        .bar {
+            width: @progress_bar__width;
+            height: @progress_bar__height;
+            background-color: @progress_bar__background_color;
+            .lib-css(transition, @progress_bar__transition);
+            .lib-css(border-radius, @progress_bar__border_radius);
+
+            .progress-text {
+                position: absolute;
+                left: 46%;
+                top: -1px;
+                color: @progress_bar_text__color;
+            }
+        }
+    }
+}

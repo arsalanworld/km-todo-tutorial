@@ -1,0 +1,150 @@
+@import "lib/variables/_responsive.less";
+@import "lib/_responsive.less";
+@import "lib/variables/_progress_indicator.less";
+@import "_progress_indicator.less";
+
+//
+// Variables
+// ------------------------------------
+@indent__standard: @indent__xs + @indent__s; // 5px + 10px = 15px
+
+@todo_link_action__text_decoration: none;
+@todo_link_action__color: #3a8565;
+
+@todo_items_li__border: @border-width__base solid #dcdcdc;
+@todo_items_li__border_radius: 16px;
+@todo_items_li__background_color: @color-white;
+@todo_items_li__margin_right: @indent__base;
+
+@todo_items_top_description__background_color: #e6e4e4;
+@todo_items_top_description__padding: @indent__standard @indent__standard @indent__xl @indent__standard;
+@todo_items_top_description__border_radius: @todo_items_li__border_radius;
+
+@todo_items_top_description_h2__margin: 0 0 8px 0;
+@todo_items_top_description_h2__color: @todo_link_action__color;
+@todo_items_top_description_h2__font_weight: 400;
+
+@todo_items_description__color: #737373;
+
+@todo_items_bottom_section__color: #ff914d;
+
+//
+// Common
+// ------------------------------------
+
+& when (@media-common = true) {
+    .todo-wrapper {
+        a, .action {
+            text-decoration: @todo_link_action__text_decoration;
+            color: @todo_link_action__color;
+        }
+    }
+
+    #todo-items {
+        list-style: none;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        padding: 0;
+
+        li {
+            border: @todo_items_li__border;
+            .lib-css(border-radius, @todo_items_li__border_radius);
+            background-color: @todo_items_li__background_color;
+            margin-right: @todo_items_li__margin_right;
+
+            .top-description {
+                background-color: @todo_items_top_description__background_color;
+                padding: @todo_items_top_description__padding;
+                .lib-css(border-radius, @todo_items_top_description__border_radius);
+                min-height: 116px;
+                position: relative;
+
+                &> h2 {
+                    margin: @todo_items_top_description_h2__margin;
+                    color: @todo_items_top_description_h2__color;
+                    font-weight: @todo_items_top_description_h2__font_weight;
+                }
+
+                .description {
+                    color: @todo_items_description__color;
+                }
+
+                .bottom-section-wrapper {
+                    position: absolute;
+                    bottom: 10px;
+                    width: 90%;
+                }
+
+                .bottom-section {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    color: @todo_items_bottom_section__color;
+                    margin-top: 20px;
+                }
+            }
+
+            .bottom-description {
+                padding: 15px;
+
+                .action-toolbar {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    align-content: center;
+                    margin-bottom: 1rem;
+
+                    p {
+                        margin: 0;
+                    }
+                }
+
+                &> a.action {
+                    display: block;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+//
+// Large screen
+// ------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__ml) {
+    #todo-items {
+        li {
+            width: 23%;
+        }
+    }
+}
+
+//
+// Medium screen / IPAD
+// ------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__ml) {
+    #todo-items {
+        li {
+            width: 260px;
+        }
+    }
+}
+
+//
+// Mobile devices
+// ------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    #todo-items {
+        li {
+            width: 100%;
+        }
+    }
+}
