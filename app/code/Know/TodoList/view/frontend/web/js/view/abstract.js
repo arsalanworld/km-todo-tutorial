@@ -36,20 +36,33 @@ define([
                 this.popUp.options.buttons = [{
                     text: buttons.cancel.text,
                     class: buttons.cancel.class,
-                    click: this.onCloseTaskPopUp.bind(this)
+                    click: this.onClosePopUp.bind(this)
                 }];
 
-                this.popUp.options.closed = function () {
-                    // custom logic here.
-                }
+                this.popUp.options.closed = this.afterBindClosePopUp.bind(this);
+                this.popUp.options.modalCloseBtnHandler = this.onClosePopUp.bind(this);
+                this.popUp.options.keyEventHandlers = {
+                    escapeKey: this.onClosePopUp.bind(this)
+                };
+
+                this.popUp.options.opened = this.onOpenPopUp.bind(this);
+                this.popUpObj = modal(this.popUp.options, $(this.popUp.element));
             }
 
             return this.popUpObj;
         },
 
-        onCloseTaskPopUp: function () {
+        onClosePopUp: function () {
             this.getPopUp().closeModal();
             return this;
+        },
+
+        afterBindClosePopUp: function () {
+            this.isPopUpVisible(false);
+        },
+
+        onOpenPopUp: function () {
+            // @todo: add some logic here.
         }
     });
 });

@@ -5,17 +5,25 @@ define([
 ], function (Component, ko, todos) {
     "use strict";
 
+    var todoObj;
+
     return Component.extend({
         defaults: {
             template: "Know_TodoList/todo",
         },
         todos: todos,
         isVisible: ko.observable(0),
+        isTodoVisible: ko.observable(false),
 
         initialize: function () {
             this._super();
-
+            todoObj = this;
             this.isVisible(this.todos().length);
+            this.isTodoVisible.subscribe(function (value) {
+                if (value) {
+                    this.getPopUp().openModal();
+                }
+            }, this);
         },
 
         getProgressCount: function (completedTasks, totalTasks) {
@@ -25,6 +33,15 @@ define([
 
             let percentage = parseInt(Math.floor(Math.round(completedTasks/totalTasks * 100)));
             return !isNaN(percentage) ? percentage : 0;
+        },
+
+        editTodo: function () {
+            todoObj.isTodoVisible(true);
+        },
+
+        afterBindClosePopUp: function () {
+            this._super();
+            this.isTodoVisible(false);
         }
     });
 });
