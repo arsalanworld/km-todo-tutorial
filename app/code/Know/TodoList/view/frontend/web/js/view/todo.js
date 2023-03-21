@@ -1,5 +1,5 @@
 define([
-    'uiComponent',
+    './abstract',
     'ko',
     'Know_TodoList/js/model/todos'
 ], function (Component, ko, todos) {
@@ -7,7 +7,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: "Know_TodoList/todo.html",
+            template: "Know_TodoList/todo",
         },
         todos: todos,
         isVisible: ko.observable(0),
