@@ -1,9 +1,10 @@
 define([
     'uiComponent',
     'ko',
+    'uiRegistry',
     'jquery',
     'Magento_Ui/js/modal/modal'
-], function (Component, ko, $, modal) {
+], function (Component, ko, registry, $, modal) {
     'use strict';
 
     return Component.extend({
@@ -31,14 +32,10 @@ define([
 
         getPopUp: function () {
             if (!this.popUpObj) {
-                var buttons = this.popUp.options.buttons;
-
-                this.popUp.options.buttons = [{
-                    text: buttons.cancel.text,
-                    class: buttons.cancel.class,
-                    click: this.onClosePopUp.bind(this)
-                }];
-
+                let buttons = this.getPopUpButtonObj();
+                if (buttons) {
+                    this.popUp.options.buttons = buttons;
+                }
                 this.popUp.options.closed = this.afterBindClosePopUp.bind(this);
                 this.popUp.options.modalCloseBtnHandler = this.onClosePopUp.bind(this);
                 this.popUp.options.keyEventHandlers = {
@@ -52,6 +49,20 @@ define([
             return this.popUpObj;
         },
 
+        getPopUpButtonObj: function () {
+            let buttonObj = [];
+            if (!this.popUpObj) {
+                let buttons = this.popUp.options.buttons;
+                buttonObj.push({
+                    text: buttons.cancel.text,
+                    class: buttons.cancel.class,
+                    click: this.onClosePopUp.bind(this)
+                });
+            }
+
+            return buttonObj;
+        },
+
         onClosePopUp: function () {
             this.getPopUp().closeModal();
             return this;
@@ -63,6 +74,12 @@ define([
 
         onOpenPopUp: function () {
             // @todo: add some logic here.
+        },
+
+        validateForm: function (registryPath) {
+            if (!registry.get(registryPath).validate().valid) {
+                this.source.set('params.invalid', true);
+            }
         }
     });
 });

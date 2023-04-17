@@ -1,0 +1,15 @@
+<div class="create-task-form block-content">
+    <form class="form form-task" id="task-form">
+        <fieldset class="fieldset task" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
+            <!-- ko foreach: getRegion('task-form') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button class="action btn-link" data-bind="attr: { type: 'button' }, text: $t('Cancel'), click: cancelCreate"></button>
+                    <button class="action primary" data-bind="attr: { type: 'button' }, text: $t('Create'), click: createTask"></button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
