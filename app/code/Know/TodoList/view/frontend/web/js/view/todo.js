@@ -1,8 +1,9 @@
 define([
     './abstract',
     'ko',
-    'Know_TodoList/js/model/todos'
-], function (Component, ko, todos) {
+    'Know_TodoList/js/model/todos',
+    'jquery'
+], function (Component, ko, todos, $) {
     "use strict";
 
     var todoObj;
@@ -35,13 +36,35 @@ define([
             return !isNaN(percentage) ? percentage : 0;
         },
 
-        editTodo: function () {
+        editTodo: function (item) {
             todoObj.isTodoVisible(true);
+            todoObj.source.set('todo', item);
+            $('input[name="start_date"]').val(
+                new Date(item.start_date).toLocaleDateString('en-US'),
+                { day: 'short' }
+            ).trigger('change');
+            $('input[name="end_date"]').val(
+                new Date(item.end_date).toLocaleDateString('en-US'),
+                { day: 'short' }
+            ).trigger('change');
         },
 
         afterBindClosePopUp: function () {
             this._super();
             this.isTodoVisible(false);
+        },
+
+        getPopUpButtons: function (btnArr) {
+            btnArr.push({
+                text: 'Save',
+                class: 'action primary',
+                click: this.saveTodoForm.bind(this)
+            });
+            return btnArr;
+        },
+
+        saveTodoForm: function () {
+            // @todo logic here
         }
     });
 });
