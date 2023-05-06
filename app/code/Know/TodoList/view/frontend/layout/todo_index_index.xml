@@ -83,7 +83,7 @@
                                                             <item name="template" xsi:type="string">ui/form/field</item>
                                                             <item name="customScope" xsi:type="string">todo</item>
                                                             <item name="imports" xsi:type="array">
-                                                                <item name="dependentValue" xsi:type="string">km-todo-scope.todo.todo-fieldset.start_date:value</item>
+                                                                <item name="dependentValue" xsi:type="string">${ $.parentName }.start_date:value</item>
                                                             </item>
                                                         </item>
                                                         <item name="provider" xsi:type="string">todoProvider</item>

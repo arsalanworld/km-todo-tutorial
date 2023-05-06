@@ -1,9 +1,10 @@
 define([
     './abstract',
     'ko',
+    'underscore',
     'Know_TodoList/js/model/todos',
     'jquery'
-], function (Component, ko, todos, $) {
+], function (Component, ko, _, todos, $) {
     "use strict";
 
     var todoObj;
@@ -11,10 +12,15 @@ define([
     return Component.extend({
         defaults: {
             template: "Know_TodoList/todo",
+            listens: {
+                'todos': 'onTodoLengthChange'
+            }
         },
         todos: todos,
         isVisible: ko.observable(0),
         isTodoVisible: ko.observable(false),
+        todoFieldset: 'km-todo-scope.todo.todo-fieldset',
+        fields: ['title', 'description', 'start_date', 'end_date'],
 
         initialize: function () {
             this._super();
@@ -25,6 +31,11 @@ define([
                     this.getPopUp().openModal();
                 }
             }, this);
+        },
+
+        onTodoLengthChange: function () {
+            this.isVisible(this.todos().length);
+            return this;
         },
 
         getProgressCount: function (completedTasks, totalTasks) {
@@ -38,13 +49,19 @@ define([
 
         editTodo: function (item) {
             todoObj.isTodoVisible(true);
-            todoObj.source.set('todo', item);
+            todoObj.source.set('todo', {
+                id: item.id,
+                title: item.title(),
+                description: item.description(),
+                completed_tasks: item.completed_tasks(),
+                total_tasks: item.total_tasks()
+            });
             $('input[name="start_date"]').val(
-                new Date(item.start_date).toLocaleDateString('en-US'),
+                new Date(item.start_date()).toLocaleDateString('en-US'),
                 { day: 'short' }
             ).trigger('change');
             $('input[name="end_date"]').val(
-                new Date(item.end_date).toLocaleDateString('en-US'),
+                new Date(item.end_date()).toLocaleDateString('en-US'),
                 { day: 'short' }
             ).trigger('change');
         },
@@ -64,7 +81,69 @@ define([
         },
 
         saveTodoForm: function () {
-            // @todo logic here
+            todoObj.source.set('params.invalid', false);
+            let item = todoObj.source.get('todo');
+            todoObj.triggerValidations();
+            if (todoObj.source.get('params.invalid')) {
+                return;
+            }
+
+            if (item.id === undefined || !item.id) {
+                item.id = todoObj.todos().length + 1;
+                todoObj.todos.push(todoObj._convertToObservables(item));
+                todoObj.getPopUp().closeModal();
+                return;
+            }
+            let index = _.findLastIndex(todoObj.todos(), {
+                id: item.id
+            });
+            if (index < 0 || index === undefined) {
+                alert("Something went wrong!");
+                return;
+            }
+
+            todoObj.todos.replace(todoObj.todos()[index], todoObj._convertToObservables(item));
+            todoObj.getPopUp().closeModal();
+        },
+
+        createNewTodo: function () {
+            todoObj.editTodo({
+                id: 0,
+                title: ko.observable(''),
+                description: ko.observable(''),
+                completed_tasks: ko.observable(0),
+                total_tasks: ko.observable(0),
+                start_date: ko.observable(new Date()),
+                end_date: ko.observable(new Date()),
+            });
+        },
+
+        deleteTodo: function (item) {
+            if (!confirm("Are you sure, you want to remove the item?")) {
+                return;
+            }
+
+            todoObj.todos.remove(function (todo) {
+                return todo.id === item.id;
+            });
+        },
+
+        _convertToObservables: function (item) {
+            return {
+                id: item.id,
+                title: ko.observable(item.title),
+                description: ko.observable(item.description),
+                start_date: ko.observable(item.start_date),
+                end_date: ko.observable(item.end_date),
+                completed_tasks: ko.observable(item.completed_tasks),
+                total_tasks: ko.observable(item.total_tasks)
+            }
+        },
+
+        triggerValidations: function () {
+            _.each(this.fields, function (field, key) {
+                this.validateForm(this.todoFieldset + '.' + field);
+            }, this);
         }
     });
 });
