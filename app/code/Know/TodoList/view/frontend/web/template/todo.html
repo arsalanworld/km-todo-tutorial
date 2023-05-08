@@ -32,7 +32,7 @@
                         width: $parent.getProgressCount(completed_tasks(), total_tasks()) + '%'
                     }"><span class="progress-text" data-bind="text: $parent.getProgressCount(completed_tasks(), total_tasks()) + '%'"></span></div>
                     </div>
-                    <a data-bind="attr: { href: '#' }, class: 'action view-this-task', text: 'View tasks'"></a>
+                    <a data-bind="attr: { href: '#' }, class: 'action view-this-task', click: $parent.viewTasks"><span data-bind="text: 'View tasks'"></span></a>
                 </div>
             </li>
         </ul>

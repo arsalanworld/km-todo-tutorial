@@ -19,6 +19,8 @@ define([
         todos: todos,
         isVisible: ko.observable(0),
         isTodoVisible: ko.observable(false),
+        isTaskPopUpVisible: ko.observable(false),
+        activeTodoId: ko.observable(0),
         todoFieldset: 'km-todo-scope.todo.todo-fieldset',
         fields: ['title', 'description', 'start_date', 'end_date'],
 
@@ -144,6 +146,11 @@ define([
             _.each(this.fields, function (field, key) {
                 this.validateForm(this.todoFieldset + '.' + field);
             }, this);
+        },
+
+        viewTasks: function (item) {
+            todoObj.activeTodoId(item.id);
+            todoObj.isTaskPopUpVisible(true);
         }
     });
 });
