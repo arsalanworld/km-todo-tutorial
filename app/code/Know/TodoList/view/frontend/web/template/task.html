@@ -1,5 +1,5 @@
 <div id="view-tasks-popup" class="todo-action" data-bind="fadeVisible: isVisible()">
-    <div class="tasks">
+    <div class="tasks" data-bind="fadeVisible: !isFormVisible()">
         <div class="task-list">
             <div class="tasks-to-do">
                 <h3><span data-bind="text: 'To dos'"></span><span data-bind="text: '( ' + pendingTasks().length + ' )'"></span></h3>
@@ -26,5 +26,31 @@
                 </if>
             </div>
         </div>
+        <div class="new-task-form">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button class="action primary task-action" data-bind="attr: { type: 'button' }, click: createNewTask">
+                        <span data-bind="text: 'New Task'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="task-form block-content" data-bind="fadeVisible: isFormVisible()">
+        <form class="form" id="task-form">
+            <fieldset class="fieldset task" data-bind="attr: { 'data-hasrequired': '* Required fields' }">
+                <each args="getRegion('task-form')" render=""></each>
+                <div class="btn-toolbar">
+                    <div class="btn-group">
+                        <button class="action btn-link" data-bind="attr: { type: 'button' }, click: function() { isFormVisible(false); }">
+                            <span data-bind="text: 'Cancel'"></span>
+                        </button>
+                        <button class="action primary" data-bind="attr: { type: 'button' }, click: saveTask">
+                            <span data-bind="text: 'Save'"></span>
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     </div>
 </div>
