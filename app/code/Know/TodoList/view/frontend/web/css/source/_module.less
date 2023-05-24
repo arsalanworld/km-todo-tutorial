@@ -28,6 +28,10 @@
 
 @todo_items_bottom_section__color: #ff914d;
 
+@todo_btn_secondary__background_color: @color-black_dark;
+@todo_btn_secondary__color: @color-white;
+@todo_btn_secondary__padding: @indent__standard;
+
 //
 // Common
 // ------------------------------------
@@ -37,6 +41,17 @@
         a, .action {
             text-decoration: @todo_link_action__text_decoration;
             color: @todo_link_action__color;
+        }
+
+        .btn-toolbar {
+            margin: 15px;
+
+            .btn-secondary {
+                background-color: @todo_btn_secondary__background_color;
+                color: @todo_btn_secondary__color;
+                padding: @todo_btn_secondary__padding;
+                text-transform: uppercase;
+            }
         }
     }
 

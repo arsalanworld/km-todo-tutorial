@@ -1,32 +1,56 @@
 <div class="todo-wrapper">
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <button class="btn btn-secondary" data-bind="attr: { type: 'button' }, click: createNewTodo">
+                <span data-bind="text: 'Add a new todo'"></span>
+            </button>
+        </div>
+    </div>
     <div data-bind="visible: isVisible()">
-        <ul id="todo-items" data-bind="foreach: todos">
+        <ul id="todo-items" data-bind="foreach: todos()">
             <li>
                 <div class="top-description">
-                    <h2 data-bind="text: title"></h2>
-                    <p data-bind="class: 'description', text: description"></p>
+                    <h2 data-bind="text: title()"></h2>
+                    <p data-bind="class: 'description', text: description()"></p>
                     <div class="bottom-section-wrapper">
                         <div class="bottom-section">
-                            <p><span data-bind="text: total_tasks"></span> Tasks</p>
-                            <p><span data-bind="text: start_date + ' - ' + end_date"></span></p>
+                            <p><span data-bind="text: total_tasks()"></span> Tasks</p>
+                            <p><span data-bind="text: start_date() + ' - ' + end_date()"></span></p>
                         </div>
                     </div>
                 </div>
                 <div class="bottom-description">
                     <div class="action-toolbar">
-                        <p><span data-bind="text: completed_tasks + '/' + total_tasks"></span></p>
+                        <p><span data-bind="text: completed_tasks() + '/' + total_tasks()"></span></p>
+                        <div class="todo-action">
+                            <a class="action edit" data-bind="attr: { href: '#' }, click: $parent.editTodo"><span data-bind="text: 'Edit'"></span></a>
+                            <a class="action delete" data-bind="attr: { href: '#' }, click: $parent.deleteTodo"><span data-bind="text: 'Delete'"></span></a>
+                        </div>
                     </div>
                     <div class="progress-indicator">
                         <div class="bar" data-bind="style: {
-                        width: $parent.getProgressCount(completed_tasks, total_tasks) + '%'
-                    }"><span class="progress-text" data-bind="text: $parent.getProgressCount(completed_tasks, total_tasks) + '%'"></span></div>
+                        width: $parent.getProgressCount(completed_tasks(), total_tasks()) + '%'
+                    }"><span class="progress-text" data-bind="text: $parent.getProgressCount(completed_tasks(), total_tasks()) + '%'"></span></div>
                     </div>
-                    <a data-bind="attr: { href: '#' }, class: 'action view-this-task', text: 'View tasks'"></a>
+                    <a data-bind="attr: { href: '#' }, class: 'action view-this-task', click: $parent.viewTasks"><span data-bind="text: 'View tasks'"></span></a>
                 </div>
             </li>
         </ul>
     </div>
     <div data-bind="visible: !isVisible()">
         <p data-bind="text: 'There are no items in your to-do list.'"></p>
+    </div>
+</div>
+<div id="todo-form" data-bind="visible: isPopUpVisible()">
+    <div class="block-content">
+        <form class="form form-todo" id="todoform">
+            <fieldset class="fieldset todo" data-bind="attr: {
+                'data-hasrequired': '* Required Fields'
+            }">
+                <!-- ko foreach: getRegion('additional-fieldsets') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+            </fieldset>
+        </form>
     </div>
 </div>
