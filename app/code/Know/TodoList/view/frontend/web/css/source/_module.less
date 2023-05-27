@@ -1,7 +1,9 @@
 @import "lib/variables/_responsive.less";
+@import "lib/variables/_tasks.less";
 @import "lib/_responsive.less";
 @import "lib/variables/_progress_indicator.less";
 @import "_progress_indicator.less";
+@import "_tasks.less";
 
 //
 // Variables
@@ -124,6 +126,49 @@
                     text-align: center;
                 }
             }
+        }
+    }
+
+    //
+    // Icons
+    // ____________________________________
+    .todo-action {
+        .action {
+            display: block;
+            text-decoration: none;
+            margin: 0 5px;
+
+            &.edit, &.delete {
+                .lib-icon-font(
+                    @icon-settings,
+                    @_icon-font-size: 18px,
+                    @_icon-font-line-height: 18px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @color-gray19,
+                    @_icon-font-color-hover: @color-gray19,
+                    @_icon-font-color-active: @color-gray19
+                );
+            }
+
+            &.delete {
+                .lib-icon-font-symbol(
+                    @_icon-font-content: @icon-trash
+                );
+            }
+        }
+    }
+
+    .action {
+        &.view-this-task {
+            .lib-icon-font(
+                @icon-search,
+                @_icon-font-size: 18px,
+                @_icon-font-line-height: 18px,
+                @_icon-font-text-hide: false,
+                @_icon-font-color: #3a8565,
+                @_icon-font-color-hover: #319369,
+                @_icon-font-color-active: #319369
+            );
         }
     }
 }

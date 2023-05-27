@@ -43,7 +43,7 @@
 </div>
 <div id="todo-form" data-bind="visible: isPopUpVisible()">
     <div class="block-content">
-        <form class="form form-todo" id="todoform">
+        <form class="form form-todo" id="todoform" data-bind="submit: saveTodoForm">
             <fieldset class="fieldset todo" data-bind="attr: {
                 'data-hasrequired': '* Required Fields'
             }">

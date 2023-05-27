@@ -7,5 +7,5 @@
     }">
     <span data-bind="text: title()"></span>
 </label>
-<a href="#" data-bind="click: function() { $parent.editTask(this, $parent); }"><span data-bind="text: 'Edit'"></span></a>
-<a href="#" data-bind="click: function() { $parent.deleteTaskItem(this, $parent); }"><span data-bind="text: 'Delete'"></span></a>
+<a href="#" class="action edit" data-bind="click: function() { $parent.editTask(this, $parent); }"><span data-bind="text: 'Edit'"></span></a>
+<a href="#" class="action delete" data-bind="click: function() { $parent.deleteTaskItem(this, $parent); }"><span data-bind="text: 'Delete'"></span></a>

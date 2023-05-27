@@ -1,0 +1,51 @@
+//
+// Common
+// _______________________________
+
+& when (@media-common = true) {
+
+    .task-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+
+        .tasks-to-do, .completed-tasks-wrapper {
+            padding: 0 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        label {
+            width: 260px;
+            display: inline-block;
+            border: @task_list_label__border;
+            padding: @task_list_label__padding;
+            .lib-css(border-radius, @task_list_label__border_radius);
+            cursor: pointer;
+        }
+
+        input {
+            vertical-align: top;
+        }
+
+        .completed-tasks {
+            label {
+                background-color: @task_list_completed_tasks__background_color;
+            }
+        }
+
+        .edit-text {
+            height: 25px;
+        }
+    }
+
+    #task-form {
+        .action {
+            display: inline-block;
+        }
+    }
+}

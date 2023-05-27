@@ -11,20 +11,20 @@
                         <span data-bind="text: 'There are no tasks in list.'"></span>
                     </div>
                 </if>
-                <if args="pendingTasks().length || completedTasks().length">
-                    <div class="completed-tasks-wrapper">
-                        <h3><span data-bind="text: 'Completed tasks'"></span><span data-bind="text: '( ' + completedTasks().length + ' )'"></span></h3>
-                        <div class="completed-tasks" data-bind="fadeVisible: completedTasks().length">
-                            <ul data-bind="foreach: completedTasks">
-                                <li render="$parent.taskListTemplate"></li>
-                            </ul>
-                        </div>
-                        <div class="message info" data-bind="fadeVisible: !completedTasks().length">
-                            <span data-bind="text: 'There are no completed tasks in list so far.'"></span>
-                        </div>
-                    </div>
-                </if>
             </div>
+            <if args="pendingTasks().length || completedTasks().length">
+                <div class="completed-tasks-wrapper">
+                    <h3><span data-bind="text: 'Completed tasks'"></span><span data-bind="text: '( ' + completedTasks().length + ' )'"></span></h3>
+                    <div class="completed-tasks" data-bind="fadeVisible: completedTasks().length">
+                        <ul data-bind="foreach: completedTasks">
+                            <li render="$parent.taskListTemplate"></li>
+                        </ul>
+                    </div>
+                    <div class="message info" data-bind="fadeVisible: !completedTasks().length">
+                        <span data-bind="text: 'There are no completed tasks in list so far.'"></span>
+                    </div>
+                </div>
+            </if>
         </div>
         <div class="new-task-form">
             <div class="btn-toolbar">
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="task-form block-content" data-bind="fadeVisible: isFormVisible()">
-        <form class="form" id="task-form">
+        <form class="form" id="task-form" data-bind="submit: saveTask">
             <fieldset class="fieldset task" data-bind="attr: { 'data-hasrequired': '* Required fields' }">
                 <each args="getRegion('task-form')" render=""></each>
                 <div class="btn-toolbar">
