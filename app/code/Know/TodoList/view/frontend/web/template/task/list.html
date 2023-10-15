@@ -3,9 +3,9 @@
         type: 'checkbox',
         value: 'task-' + id
     }, checked: status, click: function() {
-        this.status(status() ? 1 : 0); $parent._setActiveTasks($parent.activeParentId()); return true;
+        $parent.updateStatus(this, $parent)
     }">
     <span data-bind="text: title()"></span>
 </label>
 <a href="#" class="action edit" data-bind="click: function() { $parent.editTask(this, $parent); }"><span data-bind="text: 'Edit'"></span></a>
-<a href="#" class="action delete" data-bind="click: function() { $parent.deleteTaskItem(this, $parent); }"><span data-bind="text: 'Delete'"></span></a>
+<a href="#" class="action delete" data-bind="click: function() { $parent.deleteTaskItem(this); }"><span data-bind="text: 'Delete'"></span></a>

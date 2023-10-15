@@ -2,8 +2,10 @@ define([
     './abstract',
     'ko',
     'underscore',
-    'Know_TodoList/js/model/tasks'
-], function (Abstract, ko, _, tasks) {
+    'Know_TodoList/js/model/tasks',
+    'Know_TodoList/js/model/task-manager',
+    'jquery'
+], function (Abstract, ko, _, tasks, taskManager, $) {
     'use strict';
 
     return Abstract.extend({
@@ -41,6 +43,17 @@ define([
         onChangeVisibility: function (value) {
             if (value) {
                 this.getPopUp().openModal();
+                if (this._filterByParent(this.activeParentId()).length) {
+                    return;
+                }
+
+                let deferred = $.Deferred(),
+                    self = this;
+
+                taskManager.fetchItems(self.activeParentId(), null, deferred);
+                $.when(deferred).done(function () {
+                    self._setActiveTasks(self.activeParentId());
+                });
             }
         },
 
@@ -50,7 +63,7 @@ define([
         },
 
         createNewTask: function () {
-            this.editTask(this._convertToObservables({
+            this.editTask(taskManager.convertToObservables({
                 id: 0,
                 title: '',
                 status: 0,
@@ -80,48 +93,31 @@ define([
                 return;
             }
 
-            // When new item is created
-            if (task.id === undefined || !task.id) {
-                task.id = this.tasks().length + 1;
-                this.tasks().push(this._convertToObservables(task));
-                this._setActiveTasks(this.activeParentId());
-                this.isFormVisible(false);
-                return;
-            }
-
-            let index = _.findLastIndex(this.tasks(), {
-                id: task.id
-            });
-            if (index < 0 || index === undefined) {
-                alert('Something went wrong!');
-                return;
-            }
-
-            this.tasks.replace(this.tasks()[index], this._convertToObservables(task));
-            this.isFormVisible(false);
-        },
-
-        deleteTaskItem: function (item, $this) {
-            $this.tasks.remove(function (task) {
-                return task.id === item.id
+            let self = this,
+                deferred = $.Deferred();
+            taskManager.saveTaskItem(task, deferred);
+            $.when(deferred).done(function () {
+                self.isFormVisible(false);
             });
         },
 
-        _convertToObservables: function (task) {
-            return {
-                id: task.id,
-                title: ko.observable(task.title),
-                status: ko.observable(task.status),
-                parentId: ko.observable(task.parentId),
-                created: ko.observable(task.created),
-                updated: ko.observable(task.updated)
-            };
+        deleteTaskItem: function (item) {
+            taskManager.deleteTask(item);
+        },
+
+        updateStatus: function (task, self) {
+            let deferred = $.Deferred();
+            taskManager.updateStatus(task, deferred);
+            $.when(deferred).done(function () {
+                self._setActiveTasks(self.activeParentId());
+                self.isFormVisible(false);
+            });
         },
 
         _setActiveTasks: function (parentId) {
             this.taskStatuses([]); // Empty all items first
             let tasks = _.filter(this.tasks(), function (task) {
-                return task.parentId() === parentId;
+                return parseInt(task.parentId()) === parseInt(parentId);
             });
             this.pendingTasks(this._filterTaskStatus(tasks, 0));
             this.completedTasks(this._filterTaskStatus(tasks, 1));
@@ -139,6 +135,12 @@ define([
 
             return _.filter(tasks, function (task) {
                 return task.status() === status;
+            });
+        },
+
+        _filterByParent: function (parentId) {
+            return _.filter(this.tasks(), function (task) {
+                return parseInt(task.parentId()) === parseInt(parentId);
             });
         }
     });

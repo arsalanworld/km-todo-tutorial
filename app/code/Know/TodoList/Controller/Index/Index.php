@@ -1,11 +1,12 @@
 <?php
 namespace Know\TodoList\Controller\Index;
 
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index implements ActionInterface
+class Index implements AccountInterface
 {
     private PageFactory $pageFactory;
 

@@ -3,8 +3,9 @@ define([
     'ko',
     'underscore',
     'Know_TodoList/js/model/todos',
-    'jquery'
-], function (Component, ko, _, todos, $) {
+    'jquery',
+    '../model/todo-manager'
+], function (Component, ko, _, todos, $, todoManager) {
     "use strict";
 
     var todoObj;
@@ -38,6 +39,8 @@ define([
                     this.getPopUp().openModal();
                 }
             }, this);
+
+            todoManager.fetchItems();
         },
 
         onTodoLengthChange: function () {
@@ -83,7 +86,7 @@ define([
             todoObj.source.set('todo', {
                 id: item.id,
                 title: item.title(),
-                description: item.description(),
+                description: item.description() ? item.description() : "",
                 completed_tasks: item.completed_tasks(),
                 total_tasks: item.total_tasks()
             });
@@ -119,21 +122,7 @@ define([
                 return;
             }
 
-            if (item.id === undefined || !item.id) {
-                item.id = todoObj.todos().length + 1;
-                todoObj.todos.push(todoObj._convertToObservables(item));
-                todoObj.getPopUp().closeModal();
-                return;
-            }
-            let index = _.findLastIndex(todoObj.todos(), {
-                id: item.id
-            });
-            if (index < 0 || index === undefined) {
-                alert("Something went wrong!");
-                return;
-            }
-
-            todoObj.todos.replace(todoObj.todos()[index], todoObj._convertToObservables(item));
+            todoManager.saveItem(item);
             todoObj.getPopUp().closeModal();
         },
 
@@ -154,21 +143,7 @@ define([
                 return;
             }
 
-            todoObj.todos.remove(function (todo) {
-                return todo.id === item.id;
-            });
-        },
-
-        _convertToObservables: function (item) {
-            return {
-                id: item.id,
-                title: ko.observable(item.title),
-                description: ko.observable(item.description),
-                start_date: ko.observable(item.start_date),
-                end_date: ko.observable(item.end_date),
-                completed_tasks: ko.observable(item.completed_tasks),
-                total_tasks: ko.observable(item.total_tasks)
-            }
+            todoManager.deleteItem(item);
         },
 
         triggerValidations: function () {
